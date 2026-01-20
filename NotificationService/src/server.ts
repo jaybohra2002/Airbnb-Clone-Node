@@ -5,8 +5,8 @@ import v2Router from './routers/v2/index.router';
 import { appErrorHandler, genericErrorHandler } from './middlewares/error.middleware';
 import logger from './config/logger.config';
 import { attachCorrelationIdMiddleware } from './middlewares/correlation.middleware';
-import { setupMailerProcessor } from './processors/email.processor';
 import { addEmailToQueue } from './producers/email.producer';
+import { setupMailerProcessor } from './processors/email.processor';
 const app = express();
 
 app.use(express.json());
@@ -28,19 +28,17 @@ app.use(appErrorHandler);
 app.use(genericErrorHandler);
 
 
-app.listen(serverConfig.PORT, () => {
+app.listen(serverConfig.PORT, async () => {
     logger.info(`Server is running on http://localhost:${serverConfig.PORT}`);
     logger.info(`Press Ctrl+C to stop the server.`);
     setupMailerProcessor();
-    console.log('Mailer processor setup complete.');
-    const sampleNotifDto={
-        to:'sample',
-        subject:'sample subject',
-        templateId:'sample template',
+    addEmailToQueue({
+        to:`patel29kim@gmail.com`,
+        subject:'Welcome to Airbnb',
+        templateId:'welcome',
         params:{
             name:'sample name',
-            orderId:'sample order id'
+            orderId:'12345'
         }
-    }
-    addEmailToQueue(sampleNotifDto);
+    })
 });

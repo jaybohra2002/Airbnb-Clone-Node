@@ -3,6 +3,9 @@ import { MAILER_QUEUE } from "../queues/mailer.queue";
 import { NotificationDTO } from "../dto/notification.dto";
 import { MAILER_PAYLOAD } from "../producers/email.producer";
 import { getRedisClient } from "../config/redis.config";
+import { renderTemplate } from "../templates/templates.handler";
+import { sendEmail } from "../services/mailer.service";
+import logger from "../config/logger.config";
 
 export const setupMailerProcessor=async ()=>{
         const emailProcessor=new Worker<NotificationDTO>(
@@ -14,7 +17,10 @@ export const setupMailerProcessor=async ()=>{
                 throw new Error (`Unknown job name: ${job.name}`);
             }
             console.log(`Processing email job: ${job.id} with data: ${JSON.stringify(job.data)}`);
-            // we will send the part to service layer as all business logic will be there. below
+            const payload=job.data;
+            const renderedEmail=await renderTemplate(payload.templateId,payload.params);
+            await sendEmail(payload.to,payload.subject,payload.templateId,renderedEmail);
+            logger.info(`Processed email job: ${job.id} for ${payload.to}`);
         },
         {connection:getRedisClient()}
     );
