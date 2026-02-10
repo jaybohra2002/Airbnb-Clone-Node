@@ -3,21 +3,21 @@ import { hotelRepository } from "../repositories/hotel.repository";
 
 export class HotelService {
     async createHotel(hotelData: createHotelDTO) {
-        return hotelRepository.createHotel(hotelData);
+        return hotelRepository.create(hotelData);
     }
 
     async getHotelById(id: number) {
-        return hotelRepository.getHotelById(id);
+        return hotelRepository.findById(id);
     }
 
     async getAllHotels() {
-        return hotelRepository.getAllHotels();
+        return hotelRepository.findAll();
     }
     async softDeleteHotel(id: number) {
-        return hotelRepository.softDeleteHotel(id);
+        return hotelRepository.softDelete(id);
     }
     async updateHotel(id: number, hotelData: createHotelDTO) {
-        return hotelRepository.updateHotel(id, hotelData);
+        return hotelRepository.update({ id }, hotelData);
     }
 }
 

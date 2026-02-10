@@ -33,12 +33,12 @@ app.listen(serverConfig.PORT, async () => {
     logger.info(`Press Ctrl+C to stop the server.`);
     setupMailerProcessor();
     addEmailToQueue({
-        to:`patel29kim@gmail.com`,
+        to:`jayabohra210@gmail.com`,
         subject:'Welcome to Airbnb',
         templateId:'welcome',
         params:{
-            name:'sample name',
-            orderId:'12345'
+            name:'Jaya Bohra',
+            appName:'Airbnb'
         }
     })
 });
