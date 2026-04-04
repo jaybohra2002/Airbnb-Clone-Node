@@ -1,13 +1,13 @@
 package db
 
-import "AuthInGo/db/repositories"
+import "database/sql"
 
-type Storage struct{
-	UserRepository repositories.UserRepository
+type Storage struct {
+	UserRepository UserRepository
 }
 
-func NewStorage() *Storage {
+func NewStorage(_db *sql.DB) *Storage {
 	return &Storage{
-		UserRepository: repositories.UserRepositoryImpl{},
+		UserRepository: NewUserRepository(_db),
 	}
 }
